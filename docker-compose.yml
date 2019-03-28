@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  jupyter:
+    image: "jupyter/datascience-notebook:latest"
+    restart: unless-stopped
+    volumes:
+      - /opt/jupyter/work:/home/jovyan/work
+      - /opt/jupyter/work/datasets:/home/jovyan/work/datasets
+      - /opt/jupyter/work/modules:/home/jovyan/work/modules
+    ports:
+      - 8899:8888 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:jupyter.tabora.local"
+      - "traefik.backend=jupyter"
+      - "traefik.port=8899"
+    networks:
+      - default
+      - discovery
+networks:
+  discovery:
+    external: true
